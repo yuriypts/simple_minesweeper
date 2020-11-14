@@ -5,6 +5,11 @@ interface Box {
   index: number
 }
 
+
+
+const inArray = (array: Array<Array<Box>>, row: number, line: number) => 
+  0 <= row && row < array.length && 0 <= line && line < array[0].length;
+
 const COUNT = 5;
 
 const renderRow = (counts: Array<number>): Array<Box> => {
@@ -21,7 +26,23 @@ const renderRow = (counts: Array<number>): Array<Box> => {
   return arr;
 }
 
-export const GET_ARRAY_BY_DIFFUCULT = (difficult: number): Array<Array<Box>> => {
+export const calculateArray = (array: Array<Array<Box>>, row: number, line: number) => {
+  array[row][line].index = 1;
+  array[row][line].number = 0;
+
+  for (let [dx, dy] of [[0, 1], [1, 0], [0, -1], [-1, 0], [-1, -1], [-1, 1], [1, 1], [1, -1]]) {
+    const nextRow = row + dx;
+    const nextLine = line + dy;
+    
+    if (inArray(array, nextRow, nextLine) && array[nextRow][nextLine].index === 2) {
+      ++array[row][line].number
+    }
+  }
+
+  return array;
+}
+
+export const getArrayByDifficultyValue = (difficult: number): Array<Array<Box>> => {
   let counts = [-1]
   let array = Array<Array<Box>>();
 
