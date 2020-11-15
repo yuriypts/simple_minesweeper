@@ -24,7 +24,7 @@ const renderRow = (counts: Array<number>, difficult: number): Array<Box> => {
   return arr;
 }
 
-export const calculateArray = (array: Array<Array<Box>>, row: number, line: number, testArray?: Array<Array<Box>>) : Array<Array<Box>> => {
+export const calculateArray = (array: Array<Array<Box>>, row: number, line: number, calculatedArray?: Array<Array<Box>>) : Array<Array<Box>> => {
   array[row][line].number = 0;
   array[row][line].index = 1;
 
@@ -37,9 +37,9 @@ export const calculateArray = (array: Array<Array<Box>>, row: number, line: numb
         ++array[row][line].number
       }
 
-      if (testArray) {
-        if (array[nextRow][nextLine].index === 0 && testArray[nextRow][nextLine].number === 0 && testArray[nextRow][nextLine].index !== 2) {
-          calculateArray(array, nextRow, nextLine, testArray)
+      if (calculatedArray) {
+        if (array[nextRow][nextLine].index === 0 && calculatedArray[nextRow][nextLine].number === 0 && calculatedArray[nextRow][nextLine].index !== 2) {
+          calculateArray(array, nextRow, nextLine, calculatedArray)
         }
       } else {
         if (array[nextRow][nextLine].index === 0) {
