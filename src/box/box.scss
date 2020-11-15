@@ -1,5 +1,4 @@
 .wrapper {
-  width: 700px;
   margin: 0 auto;
 
   .menu {
@@ -13,7 +12,17 @@
   .box {
     display: flex;
     flex-wrap: wrap;
+  }
+
+  .box_1 {
     width: 360px;
+  }
+
+  .box_2 {
+    width: 700px;
+  }
+  .box_3 {
+    width: 1050px;
   }
 
   .game-over {

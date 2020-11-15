@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import classNames from 'classnames';
 
 import './box.scss';
 import Square from '../square';
@@ -8,23 +9,32 @@ import { getArrayByDifficultyValue, calculateArray } from '../helper';
 const Box = () => {
   const [difficult, setDifficult] = useState(DIFFUCULT.low);
   const [array, setArray] = useState(getArrayByDifficultyValue(difficult));
+  const [calculatedArray, setCalculatedArray] = useState(calculateArray(JSON.parse(JSON.stringify(array)), 0, 0));
   const [gameOver, SetGameOver] = useState(false);
-  
+
   const handleClick = (row: number, line: number) => {
-    const calculatedArray = calculateArray([...array], row, line);
-    setArray(calculatedArray);
+    if (gameOver) {
+      return false
+    }
+
+    const newArray = calculateArray([...array], row, line, calculatedArray);
+    setArray(newArray);
   }
 
   const handleDifficult = (difficultNumber: number) => {
-    const newArray = getArrayByDifficultyValue(difficult);
+    if (gameOver) {
+      return false
+    }
+
+    const newArray = getArrayByDifficultyValue(difficultNumber);
     
     setArray(newArray);
-    setDifficult(difficultNumber)
+    setCalculatedArray(calculateArray(JSON.parse(JSON.stringify(newArray)), 0, 0));
+    setDifficult(difficultNumber);
   }
 
   const handleGameOver = () => {
-    setArray(getArrayByDifficultyValue(DIFFUCULT.low));
-    setDifficult(DIFFUCULT.low);
+    setArray(getArrayByDifficultyValue(difficult));
     SetGameOver(false);
   }
 
@@ -44,7 +54,7 @@ const Box = () => {
         <input type="button" onClick={() => handleDifficult(DIFFUCULT.medium)} value="Medium" />
         <input type="button" onClick={() => handleDifficult(DIFFUCULT.high)} value="High" />
       </div>
-      <div className="box">
+      <div className={classNames('box', { [`box_${difficult}`]: true })}>
         {
           array.map((rowItem, row) => 
             rowItem.map((lineItem, line) => {

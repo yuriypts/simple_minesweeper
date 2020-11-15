@@ -21,7 +21,7 @@ const Square: FC<SquareProps> = ({ item, row, line, handleClick, gameOver }) => 
   }
 
   return (
-    <div className={classnames('square', { 'silver': item.index === 1 })} onClick={click}>{ item.index === 1 && item.number }</div>
+    <div className={classnames('square', { 'silver': item.index === 1 })} onClick={click}>{ item.index === 1 && item.number !== 0 && item.number }</div>
   );
 }
 
