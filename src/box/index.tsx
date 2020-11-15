@@ -26,16 +26,20 @@ const Box = () => {
       return false
     }
 
-    const newArray = getArrayByDifficultyValue(difficultNumber);
-    
-    setArray(newArray);
-    setCalculatedArray(calculateArray(JSON.parse(JSON.stringify(newArray)), 0, 0, undefined, true));
+    setNewArray(difficultNumber);
     setDifficult(difficultNumber);
   }
 
   const handleGameOver = () => {
-    setArray(getArrayByDifficultyValue(difficult));
+    setNewArray(difficult);
     SetGameOver(false);
+  }
+
+  const setNewArray = (difficultNumber: number) => {
+    const newArray = getArrayByDifficultyValue(difficultNumber);
+    
+    setArray(newArray);
+    setCalculatedArray(calculateArray(JSON.parse(JSON.stringify(newArray)), 0, 0, undefined, true));
   }
 
   return (
