@@ -9,7 +9,7 @@ import { getArrayByDifficultyValue, calculateArray } from '../helper';
 const Box = () => {
   const [difficult, setDifficult] = useState(DIFFUCULT.low);
   const [array, setArray] = useState(getArrayByDifficultyValue(difficult));
-  const [calculatedArray, setCalculatedArray] = useState(calculateArray(JSON.parse(JSON.stringify(array)), 0, 0));
+  const [calculatedArray, setCalculatedArray] = useState(calculateArray(JSON.parse(JSON.stringify(array)), 0, 0, undefined, true));
   const [gameOver, SetGameOver] = useState(false);
 
   const handleClick = (row: number, line: number) => {
@@ -29,7 +29,7 @@ const Box = () => {
     const newArray = getArrayByDifficultyValue(difficultNumber);
     
     setArray(newArray);
-    setCalculatedArray(calculateArray(JSON.parse(JSON.stringify(newArray)), 0, 0));
+    setCalculatedArray(calculateArray(JSON.parse(JSON.stringify(newArray)), 0, 0, undefined, true));
     setDifficult(difficultNumber);
   }
 
