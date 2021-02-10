@@ -1,24 +1,27 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import classnames from 'classnames';
 
 import './square.scss';
 
 interface SquareProps {
   handleClick: (val: number, row: number) => void;
-  index: number;
+  gameOver: () => void;
+  item: { number: number; index: number };
   row: number;
   line: number
 }
 
-const Square: FC<SquareProps> = ({ index, row, line, handleClick }) => {
+const Square: FC<SquareProps> = ({ item, row, line, handleClick, gameOver }) => {
   const click = () => {
-    if (index === 1) {
-      handleClick(row, line)
+    if (item.index === 2) {
+      return gameOver();
     }
+
+    handleClick(row, line)
   }
 
   return (
-    <div className={classnames('square', { 'silver': index })} onClick={click}></div>
+    <div className={classnames('square', { 'silver': item.index === 1 })} onClick={click}>{ item.index === 1 && item.number !== 0 && item.number }</div>
   );
 }
 

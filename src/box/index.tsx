@@ -1,62 +1,73 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
+import classNames from 'classnames';
 
 import './box.scss';
 import Square from '../square';
-
-const renderRow = (): Array<number> => {
-  const arr = Array<number>();
-
-  for (let i = 0; i < 10; i++) {
-    arr.push(Math.floor(Math.random() * Math.floor(2)));
-  }
-
-  return arr;
-}
-
-const array = [
-  renderRow(),
-  renderRow(),
-  renderRow(),
-  renderRow(),
-  renderRow()
-];
+import { DIFFUCULT } from '../constants';
+import { getArrayByDifficultyValue, calculateArray } from '../helper';
 
 const Box = () => {
-  const [version, setVersion] = useState(0);
+  const [difficult, setDifficult] = useState(DIFFUCULT.low);
+  const [array, setArray] = useState(getArrayByDifficultyValue(difficult));
+  const [calculatedArray, setCalculatedArray] = useState(calculateArray(JSON.parse(JSON.stringify(array)), 0, 0, undefined, true));
+  const [gameOver, SetGameOver] = useState(false);
 
-
-  const dfs = (array: Array<Array<number>>, i: number, j: number) => {
-    array[i][j] = 0;
-
-    for (let [dx, dy] of [[0, 1], [1, 0], [0, -1], [-1, 0]]) {
-      const nextX = j + dx;
-      const nextY = i + dy;
-      
-      if (withinGrid(array.length, array[0].length, nextX, nextY) && array[nextY][nextX] === 1) {
-        dfs(array, nextY, nextX);
-      }
+  const handleClick = (row: number, line: number) => {
+    if (gameOver) {
+      return false
     }
+
+    const newArray = calculateArray([...array], row, line, calculatedArray);
+    setArray(newArray);
   }
 
-  const withinGrid = (h: number, w: number, x: number, y: number) => {
-    return 0 <= x && x < w && 0 <= y && y < h;
+  const handleDifficult = (difficultNumber: number) => {
+    if (gameOver) {
+      return false
+    }
+
+    setNewArray(difficultNumber);
+    setDifficult(difficultNumber);
   }
 
-  const handleClick = (val: number, row: number) => {
-      dfs(array, val, row);
-      setVersion(version + 1);
+  const handleGameOver = () => {
+    setNewArray(difficult);
+    SetGameOver(false);
+  }
+
+  const setNewArray = (difficultNumber: number) => {
+    const newArray = getArrayByDifficultyValue(difficultNumber);
+    
+    setArray(newArray);
+    setCalculatedArray(calculateArray(JSON.parse(JSON.stringify(newArray)), 0, 0, undefined, true));
   }
 
   return (
-    <div className="box">
-      {
-        array.map((row, i) => 
-          row.map((item, j) => {
-            const key = i + row.length + j;
-            return <Square handleClick={handleClick} index={item} row={i} line={j} key={key} />
-          })
-        )
-      }
+    <div className="wrapper">
+      <div className="game-over">
+        { gameOver && 
+            <div>
+              <div>Game Over</div>
+              <input type="button" onClick={() => handleGameOver()} value="Let's try again" />
+            </div>
+        }
+      </div>
+      <div className="menu">
+        <div>Difficulty</div>
+        <input type="button" onClick={() => handleDifficult(DIFFUCULT.low)} value="Low" />
+        <input type="button" onClick={() => handleDifficult(DIFFUCULT.medium)} value="Medium" />
+        <input type="button" onClick={() => handleDifficult(DIFFUCULT.high)} value="High" />
+      </div>
+      <div className={classNames('box', { [`box_${difficult}`]: true })}>
+        {
+          array.map((rowItem, row) => 
+            rowItem.map((lineItem, line) => {
+              const key = row + rowItem.length + line;
+              return <Square handleClick={handleClick} item={lineItem} row={row} line={line} key={key} gameOver={() => SetGameOver(true)} />
+            })
+          )
+        }
+      </div>
     </div>
   );
 }

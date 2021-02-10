@@ -3,8 +3,16 @@
   height: 50px;
   margin: 10px;
   background: #7979f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
 }
 
 .silver {
   background: silver;
+}
+
+.red {
+  background: red;
 }
